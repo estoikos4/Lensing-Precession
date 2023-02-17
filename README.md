@@ -1,3 +1,3 @@
 # Lensing-Precession
 
-Combinig Lensing and Precession
+Combining Lensing and Precession

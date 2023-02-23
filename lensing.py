@@ -1,6 +1,7 @@
 import numpy as np
 import scipy.special as sc
 import mpmath as mp
+from pycbc.types import FrequencySeries
 
 class Lensing():
 
@@ -133,3 +134,20 @@ class Lensing():
 
         F_val = np.complex128(first_term * second_term * third_term)
         return F_val
+
+    def lensing_strain(self, f, delta_f = 0.25, frequencySeries=True):
+        """ lensed strain = unlensed strain * amplification factor
+        Args:
+            f (numpy array): frequency
+            delta_f (float): interval length of frequency. Default at 0.25 Hz.
+            frequencySeries (bool): True for FrequencySeries. False otherwise.
+        
+        Returns:
+            hL (numpy array): lensed strain
+        """
+        hL = self.hI(f) * self.F(f)
+        if frequencySeries:
+            return FrequencySeries(hL, delta_f=delta_f)
+        return hL
+        
+

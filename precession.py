@@ -1,6 +1,7 @@
 import numpy as np
 import pandas as pd
 from scipy.integrate import odeint
+from pycbc.types import FrequencySeries
 
 class Precession():
 
@@ -132,7 +133,8 @@ class Precession():
         Fc = (1./2.)*(1+np.cos(self.theta_S)**2)*np.cos(2*self.phi_S)*sin2psi + np.cos(self.theta_S)*np.sin(2*self.phi_S)*cos2psi
 
         phi_p_temp = np.arctan2(2*LdotN*Fc, (1+LdotN**2)*Fp)
-        return np.unwrap(phi_p_temp, discont=np.pi)
+        phi_p = np.unwrap(phi_p_temp, discont=np.pi)
+        return phi_p
 
     ### get the delta phi_P
 
@@ -239,8 +241,10 @@ class Precession():
         Psi = term1 + prefactor * term2
         return Psi
     
-    def precessing_strain(self, f):
+    def precessing_strain(self, f, delta_f=0.25, frequencySeries=True):
         """ precessing GW
         """
-        strain = self.amplitude(f) * np.exp(1j*(self.Psi(f) - self.phase_phi_P(f) + self.phase_delta_phi(f)))
-        return strain
+        precessing_strain = self.amplitude(f) * np.exp(1j*(self.Psi(f) - self.phase_phi_P(f) + self.phase_delta_phi(f)))
+        if frequencySeries:
+            return FrequencySeries(precessing_strain, delta_f, delta_f)
+        return precessing_strain

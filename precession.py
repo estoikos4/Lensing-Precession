@@ -244,7 +244,7 @@ class Precession():
     def precessing_strain(self, f, delta_f=0.25, frequencySeries=True):
         """ precessing GW
         """
-        precessing_strain = self.amplitude(f) * np.exp(1j*(self.Psi(f) - self.phase_phi_P(f) + self.phase_delta_phi(f)))
+        precessing_strain = self.amplitude(f) * np.exp(1j*(self.Psi(f) - self.phase_phi_P(f) + 2*self.phase_delta_phi(f)))
         if frequencySeries:
             return FrequencySeries(precessing_strain, delta_f, delta_f)
         return precessing_strain
